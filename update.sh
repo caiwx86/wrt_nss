@@ -775,7 +775,7 @@ main() {
     fix_quickstart
     update_oaf_deconfig
     add_timecontrol
-    add_gecoosac
+    # add_gecoosac
     install_feeds
     support_fw4_adg
     update_script_priority
