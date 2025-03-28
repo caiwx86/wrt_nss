@@ -736,6 +736,17 @@ update_dns_app_menu_location() {
     fi
 }
 
+lede() {
+
+    cd $BUILD_DIR
+    chmod +x $BASE_PATH/patches/*.sh
+    # AdguardHome
+    $BASE_PATH/patches/preset-adguardhome.sh $BUILD_DIR
+    # lede系统一些特定优化
+    $BASE_PATH/patches/lede.sh
+
+}
+
 main() {
     clone_repo
     clean_up
@@ -781,6 +792,9 @@ main() {
     update_script_priority
     # update_proxy_app_menu_location
     # update_dns_app_menu_location
+    if [[ $REPO_URL == *"lede"* ]]; then
+        lede
+    fi
 }
 
 main "$@"
