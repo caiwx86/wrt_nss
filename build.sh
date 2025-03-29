@@ -41,6 +41,9 @@ $BASE_PATH/update.sh "$REPO_URL" "$REPO_BRANCH" "$BASE_PATH/$BUILD_DIR" "$COMMIT
 
 \cp -f "$CONFIG_FILE" "$BASE_PATH/$BUILD_DIR/.config"
 
+# 添加其他NSS/12M大内核等其他优化
+$BASE_PATH/patches/function.sh "$BASE_PATH/$BUILD_DIR"
+
 cd "$BASE_PATH/$BUILD_DIR"
 make defconfig
 

@@ -99,7 +99,7 @@ remove_unwanted_packages() {
         "shadowsocksr-libev" "dae" "daed" "mihomo" "geoview" "tailscale" "open-app-filter"
     )
     local small8_packages=(
-        "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq" "haproxy"
+        "ppp" "firewall" "dae" "daed-next" "libnftnl" "nftables" "dnsmasq" "haproxy"
     )
 
     for pkg in "${luci_packages[@]}"; do
@@ -154,7 +154,7 @@ install_small8() {
         luci-app-store quickstart luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest \
         luci-theme-argon netdata luci-app-netdata lucky luci-app-lucky luci-app-openclash luci-app-homeproxy \
         luci-app-amlogic nikki luci-app-nikki tailscale luci-app-tailscale oaf open-app-filter luci-app-oaf \
-        easytier luci-app-easytier easytier luci-app-easytier nps luci-app-npc luci-app-ssr-plus
+        easytier luci-app-easytier easytier luci-app-easytier nps luci-app-npc luci-app-ssr-plus daed luci-app-daed
 }
 
 install_feeds() {
