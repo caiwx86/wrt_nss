@@ -98,9 +98,16 @@ remove_unwanted_packages() {
         "chinadns-ng" "ipt2socks" "tcping" "trojan-plus" "simple-obfs"
         "shadowsocksr-libev" "dae" "daed" "mihomo" "geoview" "tailscale" "open-app-filter"
     )
-    local small8_packages=(
-        "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq" "haproxy" "luci-theme-argon" "luci-app-argon-config"
-    )
+    
+    if [[ $REPO_URL == *"lede"* ]]; then
+        local small8_packages=(
+            "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq" "haproxy" "luci-theme-argon" "luci-app-argon-config"
+        )
+    else
+        local small8_packages=(
+            "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq" "haproxy"
+        )
+    fi    
 
     for pkg in "${luci_packages[@]}"; do
         \rm -rf ./feeds/luci/applications/$pkg
@@ -146,15 +153,27 @@ update_golang() {
 }
 
 install_small8() {
-    ./scripts/feeds install -p small8 -f xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
-        naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata v2ray-geoview v2ray-plugin \
-        tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
-        luci-app-passwall alist luci-app-alist smartdns luci-app-smartdns v2dat mosdns luci-app-mosdns \
-        adguardhome luci-app-adguardhome ddns-go luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd \
-        luci-app-store quickstart luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest \
-        netdata luci-app-netdata lucky luci-app-lucky luci-app-openclash luci-app-homeproxy \
-        luci-app-amlogic nikki luci-app-nikki tailscale luci-app-tailscale oaf open-app-filter luci-app-oaf \
-        easytier luci-app-easytier easytier luci-app-easytier nps luci-app-npc luci-app-ssr-plus
+    # LEDE 平台所需安装插件
+    if [[ $REPO_URL == *"lede"* ]]; then
+        ./scripts/feeds install -p small8 -f xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
+            naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata v2ray-geoview v2ray-plugin \
+            tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
+            luci-app-passwall alist luci-app-alist smartdns luci-app-smartdns v2dat mosdns luci-app-mosdns \
+            adguardhome luci-app-adguardhome taskd luci-lib-xterm luci-lib-taskd luci-app-store quickstart \
+            luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest lucky luci-app-lucky \
+            luci-app-amlogic tailscale luci-app-tailscale oaf open-app-filter luci-app-oaf \
+            easytier luci-app-easytier nps luci-app-npc luci-app-ssr-plus
+    else 
+        ./scripts/feeds install -p small8 -f xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
+            naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata v2ray-geoview v2ray-plugin \
+            tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
+            luci-app-passwall alist luci-app-alist smartdns luci-app-smartdns v2dat mosdns luci-app-mosdns \
+            adguardhome luci-app-adguardhome ddns-go luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd \
+            luci-app-store quickstart luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest \
+            netdata luci-app-netdata lucky luci-app-lucky luci-app-openclash luci-app-homeproxy \
+            luci-app-amlogic nikki luci-app-nikki tailscale luci-app-tailscale oaf open-app-filter luci-app-oaf \
+            luci-theme-argon luci-theme-argon-config easytier luci-app-easytier nps luci-app-npc luci-app-ssr-plus
+    fi
 }
 
 install_feeds() {
