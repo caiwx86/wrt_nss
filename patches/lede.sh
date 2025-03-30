@@ -22,6 +22,9 @@ git_sparse_clone master https://github.com/QiuSimons/luci-app-daed \
 # 解决luci-app-daed 依赖问题
 mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubusercontent.com/immortalwrt/packages/refs/heads/master/libs/libcron/Makefile
 
+git_sparse_clone openwrt-24.10 https://github.com/sbwml/luci-theme-argon \
+   luci-app-argon-config luci-theme-argon 
+
 # 修改 Docker 路径
 if [ -f "package/luci-app-docker/root/etc/docker/daemon.json" ]; then
 sed -i "s|\"data-root\": \"/opt/\",|\"data-root\": \"/opt/docker/\",|" package/luci-app-docker/root/etc/docker/daemon.json
