@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "execute lede.sh"
 # 修改内核版本
-# sed -i 's/KERNEL_PATCHVER:=*.*/KERNEL_PATCHVER:=6.6/g' target/linux/rockchip/Makefile
+# sed -i 's/KERNEL_PATCHVER:=*.*/KERNEL_PATCHVER:=6.6/g' target/linux/qualcommax/Makefile
 
 # TTYD 免登录
 sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.config
@@ -16,11 +16,29 @@ function git_sparse_clone() {
   cd .. && rm -rf $repodir
 }
 
+function remove_package() {
+   packages="$@"
+   for package in $packages; do 
+      pkg_path=$(find . -name "$package")
+      if [[ ! "$pkg_path" == "" ]]; then
+         rm -rvf $pkg_path
+      fi
+   done
+}
 # 添加额外插件
 git_sparse_clone master https://github.com/QiuSimons/luci-app-daed \
    daed luci-app-daed
 # 解决luci-app-daed 依赖问题
 mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubusercontent.com/immortalwrt/packages/refs/heads/master/libs/libcron/Makefile
+
+remove_package luci-app-argon-config luci-theme-argon 
+git_sparse_clone openwrt-24.10 https://github.com/sbwml/luci-theme-argon \
+   luci-app-argon-config luci-theme-argon 
+
+argon_css_file=$(find package/luci-theme-argon/ -type f -name "cascade.css")
+#修改字体
+sed -i "/^.main .main-left .nav li a {/,/^}/ { /font-weight: bolder/d }" $argon_css_file
+sed -i '/^\[data-page="admin-system-opkg"\] #maincontent>.container {/,/}/ s/font-weight: 600;/font-weight: normal;/' $argon_css_file
 
 # 修改 Docker 路径
 if [ -f "package/luci-app-docker/root/etc/docker/daemon.json" ]; then
@@ -45,5 +63,4 @@ sed -i 's/admin\/status/admin\/network/g'   feeds/luci/protocols/luci-proto-wire
 sed -i 's/services/system/g' $(find ./feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/ -type f -name "luci-app-ttyd.json")
 sed -i '3 a\\t\t"order": 10,' $(find ./feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/ -type f -name "luci-app-ttyd.json")
 sed -i 's/services/network/g' $(find ./feeds/luci/applications/luci-app-upnp/root/usr/share/luci/menu.d/ -type f -name "luci-app-upnp.json")
-sed -i 's/services/nas/g' $(find ./feeds/luci/applications/luci-app-alist/root/usr/share/luci/menu.d/ -type f -name "luci-app-alist.json")
 sed -i 's/services/nas/g' $(find ./feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/ -type f -name "luci-app-samba4.json")
