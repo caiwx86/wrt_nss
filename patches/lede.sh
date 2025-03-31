@@ -31,6 +31,10 @@ git_sparse_clone master https://github.com/QiuSimons/luci-app-daed \
 # 解决luci-app-daed 依赖问题
 mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubusercontent.com/immortalwrt/packages/refs/heads/master/libs/libcron/Makefile
 
+# 添加luci-app-netdata
+remove_package luci-app-netdata
+git clone https://github.com/sirpdboy/luci-app-netdata package/luci-app-netdata
+
 remove_package luci-app-argon-config luci-theme-argon 
 git_sparse_clone openwrt-24.10 https://github.com/sbwml/luci-theme-argon \
    luci-app-argon-config luci-theme-argon 
