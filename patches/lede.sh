@@ -25,6 +25,10 @@ function remove_package() {
       fi
    done
 }
+
+# 删除不用插件
+remove_package luci-app-turboacc luci-app-ddns
+
 # 添加额外插件
 git_sparse_clone master https://github.com/QiuSimons/luci-app-daed \
    daed luci-app-daed
