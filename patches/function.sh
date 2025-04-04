@@ -148,5 +148,33 @@ function generate_config() {
   cat_kernel_config "target/linux/qualcommax/${target}/config-default"
 }
 
+# Git稀疏克隆，只克隆指定目录到本地
+function git_sparse_clone() {
+  branch="$1" repourl="$2" && shift 2
+  git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
+  repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
+  cd $repodir && git sparse-checkout set $@
+  mv -f $@ ../package
+  cd .. && rm -rf $repodir
+}
+
+function remove_package() {
+   packages="$@"
+   for package in $packages; do 
+      pkg_path=$(find . -name "$package")
+      if [[ ! "$pkg_path" == "" ]]; then
+         rm -rvf $pkg_path
+      fi
+   done
+}
+
+function add_daed() {
+# 删除不用插件
+remove_package daed luci-app-daed
+# 添加额外插件
+git_sparse_clone master https://github.com/QiuSimons/luci-app-daed \
+   daed luci-app-daed
+}
 # 主要执行程序
+add_daed
 generate_config && cat $config_file
