@@ -175,6 +175,19 @@ remove_package daed luci-app-daed
 git_sparse_clone master https://github.com/QiuSimons/luci-app-daed \
    daed luci-app-daed
 }
+
+function set_theme(){
+remove_package luci-app-argon-config luci-theme-argon 
+git_sparse_clone openwrt-24.10 https://github.com/sbwml/luci-theme-argon \
+   luci-app-argon-config luci-theme-argon 
+
+argon_css_file=$(find package/luci-theme-argon/ -type f -name "cascade.css")
+#修改字体
+sed -i "/^.main .main-left .nav li a {/,/^}/ { /font-weight: bolder/d }" $argon_css_file
+sed -i '/^\[data-page="admin-system-opkg"\] #maincontent>.container {/,/}/ s/font-weight: 600;/font-weight: normal;/' $argon_css_file
+}
+
 # 主要执行程序
 add_daed
+set_theme
 generate_config && cat $config_file

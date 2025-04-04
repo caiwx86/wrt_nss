@@ -32,15 +32,6 @@ remove_package luci-app-turboacc luci-app-ddns
 # 解决luci-app-daed 依赖问题
 mkdir -p package/libcron && wget -O package/libcron/Makefile https://raw.githubusercontent.com/immortalwrt/packages/refs/heads/master/libs/libcron/Makefile
 
-remove_package luci-app-argon-config luci-theme-argon 
-git_sparse_clone openwrt-24.10 https://github.com/sbwml/luci-theme-argon \
-   luci-app-argon-config luci-theme-argon 
-
-argon_css_file=$(find package/luci-theme-argon/ -type f -name "cascade.css")
-#修改字体
-sed -i "/^.main .main-left .nav li a {/,/^}/ { /font-weight: bolder/d }" $argon_css_file
-sed -i '/^\[data-page="admin-system-opkg"\] #maincontent>.container {/,/}/ s/font-weight: 600;/font-weight: normal;/' $argon_css_file
-
 # 修改 Docker 路径
 if [ -f "package/luci-app-docker/root/etc/docker/daemon.json" ]; then
 sed -i "s|\"data-root\": \"/opt/\",|\"data-root\": \"/opt/docker/\",|" package/luci-app-docker/root/etc/docker/daemon.json
