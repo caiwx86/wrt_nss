@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "execute lede.sh"
 # 修改内核版本
-sed -i 's/KERNEL_PATCHVER:=*.*/KERNEL_PATCHVER:=6.6/g' target/linux/qualcommax/Makefile
+# sed -i 's/KERNEL_PATCHVER:=*.*/KERNEL_PATCHVER:=6.6/g' target/linux/qualcommax/Makefile
 
 # TTYD 免登录
 sed -i 's|/bin/login|/bin/login -f root|g' feeds/packages/utils/ttyd/files/ttyd.config
